@@ -6,16 +6,7 @@ function sanitizeFilename(name: string) {
   return name.replace(/[^a-zA-Z0-9.-]/g, "_");
 }
 
-export async function uploadMenuImage(file: File) {
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const blob = await put(
-      `menu/${Date.now()}-${sanitizeFilename(file.name)}`,
-      file,
-      { access: "public", token: process.env.BLOB_READ_WRITE_TOKEN },
-    );
-    return blob.url;
-  }
-
+async function saveLocal(file: File) {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   const dir = path.join(process.cwd(), "public", "uploads", "menu");
@@ -23,4 +14,42 @@ export async function uploadMenuImage(file: File) {
   const filename = `${Date.now()}-${sanitizeFilename(file.name)}`;
   await writeFile(path.join(dir, filename), buffer);
   return `/uploads/menu/${filename}`;
+}
+
+function canUseBlobStorage() {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return true;
+
+  // OIDC only works on Vercel deployments (or if dev OIDC is enabled in Blob settings)
+  const hasOidc =
+    Boolean(process.env.VERCEL_OIDC_TOKEN) &&
+    Boolean(process.env.BLOB_STORE_ID);
+
+  return Boolean(hasOidc && process.env.VERCEL);
+}
+
+export async function uploadMenuImage(file: File) {
+  if (!canUseBlobStorage()) {
+    return saveLocal(file);
+  }
+
+  try {
+    const blob = await put(
+      `menu/${Date.now()}-${sanitizeFilename(file.name)}`,
+      file,
+      {
+        access: "public",
+        ...(process.env.BLOB_READ_WRITE_TOKEN
+          ? { token: process.env.BLOB_READ_WRITE_TOKEN }
+          : {}),
+      },
+    );
+    return blob.url;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("OIDC") || message.includes("blob credentials")) {
+      console.warn("Blob upload failed, saving locally:", message);
+      return saveLocal(file);
+    }
+    throw error;
+  }
 }

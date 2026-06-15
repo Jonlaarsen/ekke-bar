@@ -9,7 +9,7 @@ export default function Home() {
     <main className="bg-secondary-bg text-background">
       <HeroVideo />
       <OmOss />
-      <MenuSection />
+      {/* <MenuSection /> */}
       <BesokOss />
       <Footer />
     </main>

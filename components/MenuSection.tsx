@@ -10,16 +10,16 @@ export default async function MenuSection() {
     >
       <img
         src="/ekke_img/sparkle.png"
-        className="pointer-events-none absolute bottom-20 left-10 w-70"
+        className="pointer-events-none absolute md:bottom-20 bottom-5 left-10 md:w-70 w-30 z-50"
         alt=""
       />
       <img
         src="/ekke_img/sparkle.png"
-        className="pointer-events-none absolute top-20 right-10 w-70"
+        className="pointer-events-none absolute top-20 right-10 md:w-70 w-30"
         alt=""
       />
 
-      <div className="relative z-10 mx-auto max-w-6xl space-y-12">
+      <div className="relative z-10 mx-auto max-w-5xl space-y-12">
         <div className="space-y-4 text-center">
           <p className="text-xs font-medium uppercase tracking-[0.35em] text-secondary-bg/70">
             Meny
@@ -37,10 +37,10 @@ export default async function MenuSection() {
             Inga menykort publicerade ännu.
           </p>
         ) : (
-          <ul className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+          <ul className="grid grid-cols-1 gap-10 sm:grid-cols-2  lg:gap-12">
             {cards.map((card) => (
               <li key={card.id} className="flex flex-col items-center gap-4">
-                <div className="aspect-[210/297] w-full max-w-[min(100%,320px)] overflow-hidden rounded-sm bg-white shadow-lg">
+                <div className=" w-full max-w-[min(100%,620px)] overflow-hidden rounded-sm bg-white shadow-lg">
                   <img
                     src={card.image_url}
                     alt={card.title || "Menykort"}
