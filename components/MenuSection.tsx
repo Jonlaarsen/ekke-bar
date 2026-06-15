@@ -1,7 +1,8 @@
 import { listMenuCards } from "@/lib/menu-cards-db";
+import { withDisplayImageUrl } from "@/lib/menu-image-url";
 
 export default async function MenuSection() {
-  const cards = await listMenuCards();
+  const cards = (await listMenuCards()).map(withDisplayImageUrl);
 
   return (
     <div

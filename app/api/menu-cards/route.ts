@@ -5,13 +5,14 @@ import {
   listMenuCards,
 } from "@/lib/menu-cards-db";
 import { requireAuthResponse } from "@/lib/require-auth";
+import { withDisplayImageUrl } from "@/lib/menu-image-url";
 import { uploadMenuImage } from "@/lib/upload";
 
 export const runtime = "nodejs";
 
 export async function GET() {
   try {
-    const cards = await listMenuCards();
+    const cards = (await listMenuCards()).map(withDisplayImageUrl);
     return NextResponse.json(cards);
   } catch (error) {
     console.error(error);
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
     const sort_order = await getNextSortOrder();
     const card = await createMenuCard({ title, image_url, sort_order });
 
-    return NextResponse.json(card, { status: 201 });
+    return NextResponse.json(withDisplayImageUrl(card), { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

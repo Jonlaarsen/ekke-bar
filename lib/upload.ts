@@ -19,7 +19,6 @@ async function saveLocal(file: File) {
 function canUseBlobStorage() {
   if (process.env.BLOB_READ_WRITE_TOKEN) return true;
 
-  // OIDC only works on Vercel deployments (or if dev OIDC is enabled in Blob settings)
   const hasOidc =
     Boolean(process.env.VERCEL_OIDC_TOKEN) &&
     Boolean(process.env.BLOB_STORE_ID);
@@ -37,7 +36,7 @@ export async function uploadMenuImage(file: File) {
       `menu/${Date.now()}-${sanitizeFilename(file.name)}`,
       file,
       {
-        access: "public",
+        access: "private",
         ...(process.env.BLOB_READ_WRITE_TOKEN
           ? { token: process.env.BLOB_READ_WRITE_TOKEN }
           : {}),

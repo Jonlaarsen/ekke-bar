@@ -4,6 +4,7 @@ import {
   updateMenuCard,
 } from "@/lib/menu-cards-db";
 import { requireAuthResponse } from "@/lib/require-auth";
+import { withDisplayImageUrl } from "@/lib/menu-image-url";
 import { uploadMenuImage } from "@/lib/upload";
 import { NextResponse } from "next/server";
 
@@ -18,7 +19,7 @@ export async function GET(_request: Request, context: RouteContext) {
     if (!card) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
-    return NextResponse.json(card);
+    return NextResponse.json(withDisplayImageUrl(card));
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Failed to load card" }, { status: 500 });
@@ -67,7 +68,7 @@ export async function PUT(request: Request, context: RouteContext) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    return NextResponse.json(card);
+    return NextResponse.json(withDisplayImageUrl(card));
   } catch (error) {
     console.error(error);
     return NextResponse.json(
