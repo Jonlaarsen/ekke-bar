@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   try {
     const result = await get(url, { access: "private" });
 
-    if (result.statusCode !== 200 || !result.stream) {
+    if (!result || result.statusCode !== 200) {
       return new NextResponse(null, { status: 404 });
     }
 
