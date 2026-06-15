@@ -6,6 +6,8 @@ export const metadata = {
   description: "Drinks and snacks at Ekke Bar",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function MenuPage() {
   return (
     <main className="bg-primary/20 text-background">

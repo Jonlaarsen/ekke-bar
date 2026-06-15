@@ -5,6 +5,7 @@ import {
 } from "@/lib/menu-cards-db";
 import { requireAuthResponse } from "@/lib/require-auth";
 import { withDisplayImageUrl } from "@/lib/menu-image-url";
+import { revalidateMenuPages } from "@/lib/revalidate-menu";
 import { uploadMenuImage } from "@/lib/upload";
 import { NextResponse } from "next/server";
 
@@ -68,6 +69,8 @@ export async function PUT(request: Request, context: RouteContext) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
+    revalidateMenuPages();
+
     return NextResponse.json(withDisplayImageUrl(card));
   } catch (error) {
     console.error(error);
@@ -88,6 +91,9 @@ export async function DELETE(_request: Request, context: RouteContext) {
     if (!deleted) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
+
+    revalidateMenuPages();
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error(error);

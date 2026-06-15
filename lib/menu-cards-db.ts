@@ -1,5 +1,6 @@
 import { hasDatabase, getSql } from "@/lib/db";
 import type { MenuCard, MenuCardInput } from "@/lib/menu-cards";
+import { unstable_noStore as noStore } from "next/cache";
 
 function mapRow(row: Record<string, unknown>): MenuCard {
   return {
@@ -13,6 +14,7 @@ function mapRow(row: Record<string, unknown>): MenuCard {
 }
 
 export async function listMenuCards(): Promise<MenuCard[]> {
+  noStore();
   if (!hasDatabase()) return [];
   const sql = getSql();
   const rows = await sql`

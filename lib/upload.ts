@@ -16,6 +16,10 @@ async function saveLocal(file: File) {
   return `/uploads/menu/${filename}`;
 }
 
+function isVercelRuntime() {
+  return Boolean(process.env.VERCEL);
+}
+
 function canUseBlobStorage() {
   if (process.env.BLOB_READ_WRITE_TOKEN) return true;
 
@@ -28,6 +32,11 @@ function canUseBlobStorage() {
 
 export async function uploadMenuImage(file: File) {
   if (!canUseBlobStorage()) {
+    if (isVercelRuntime()) {
+      throw new Error(
+        "Blob storage is not configured. Connect the store in Vercel Storage or set BLOB_READ_WRITE_TOKEN.",
+      );
+    }
     return saveLocal(file);
   }
 
@@ -45,7 +54,10 @@ export async function uploadMenuImage(file: File) {
     return blob.url;
   } catch (error) {
     const message = error instanceof Error ? error.message : "";
-    if (message.includes("OIDC") || message.includes("blob credentials")) {
+    if (
+      !isVercelRuntime() &&
+      (message.includes("OIDC") || message.includes("blob credentials"))
+    ) {
       console.warn("Blob upload failed, saving locally:", message);
       return saveLocal(file);
     }

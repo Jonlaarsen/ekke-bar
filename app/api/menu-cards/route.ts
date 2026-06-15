@@ -6,6 +6,7 @@ import {
 } from "@/lib/menu-cards-db";
 import { requireAuthResponse } from "@/lib/require-auth";
 import { withDisplayImageUrl } from "@/lib/menu-image-url";
+import { revalidateMenuPages } from "@/lib/revalidate-menu";
 import { uploadMenuImage } from "@/lib/upload";
 
 export const runtime = "nodejs";
@@ -46,6 +47,8 @@ export async function POST(request: Request) {
     const image_url = await uploadMenuImage(file);
     const sort_order = await getNextSortOrder();
     const card = await createMenuCard({ title, image_url, sort_order });
+
+    revalidateMenuPages();
 
     return NextResponse.json(withDisplayImageUrl(card), { status: 201 });
   } catch (error) {
