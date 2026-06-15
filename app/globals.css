@@ -3,24 +3,99 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary:#28581A;
+  --secondary-bg:#FFFBE8;
+  --text-outline-width: 2px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary-bg: var(--secondary-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-coiny);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  scroll-behavior:smooth;
+}
+
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+@keyframes hero-scroll-pulse {
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(0.55);
+    opacity: 1;
+  }
+}
+
+.hero-scroll-line {
+  transform-origin: top;
+  animation: hero-scroll-pulse 1.8s ease-in-out infinite;
+}
+
+.text-outline {
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: var(--text-outline-width);
+  -webkit-text-stroke-color: currentColor;
+  paint-order: stroke fill;
+}
+
+@supports not (paint-order: stroke fill) {
+  .text-outline {
+    -webkit-text-stroke: 0;
+    -webkit-text-fill-color: transparent;
+    text-shadow:
+      1px 1px 0 currentColor,
+      -1px 1px 0 currentColor,
+      1px -1px 0 currentColor,
+      -1px -1px 0 currentColor,
+      0 1px 0 currentColor,
+      0 -1px 0 currentColor,
+      1px 0 0 currentColor,
+      -1px 0 0 currentColor,
+      2px 2px 0 currentColor,
+      -2px 2px 0 currentColor,
+      2px -2px 0 currentColor,
+      -2px -2px 0 currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-line {
+    animation: none;
+  }
+}
+
+img,
+canvas,
+picture,
+video {
+  -webkit-user-drag: none;
+  user-select: none;
 }
