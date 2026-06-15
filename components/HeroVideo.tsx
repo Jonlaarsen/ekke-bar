@@ -164,9 +164,8 @@ export default function HeroVideo() {
   return (
     <section ref={sectionRef} className="relative bg-black">
       <div
-        className={`relative h-svh w-full overflow-hidden transition-opacity duration-700 ${
-          ready ? "opacity-100" : "opacity-0"
-        }`}
+        className={`relative h-svh w-full overflow-hidden transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"
+          }`}
       >
         <canvas
           ref={canvasRef}
@@ -178,12 +177,12 @@ export default function HeroVideo() {
         <div className="pointer-events-none absolute inset-0 " aria-hidden />
         <img
           src="/ekke_img/sparkle.png"
-          className="w-100 h-auto absolute top-20 left-10 rotate-y-180"
+          className="w-60 md:w-100 h-auto absolute top-20 md:left-10 left-0 rotate-y-180"
           alt=""
         />
         <img
           src="/ekke_img/sparkle.png"
-          className="w-90 h-auto absolute bottom-30 right-10"
+          className="w-50 md:w-90 h-auto absolute bottom-30 right-0 md:right-10"
           alt=""
         />
         <div className="absolute bottom-10 left-10 text-xl uppercase tracking-[0.3em] ">
