@@ -38,10 +38,10 @@ export default async function MenuSection() {
             Inga menykort publicerade ännu.
           </p>
         ) : (
-          <ul className="grid grid-cols-1 gap-10 sm:grid-cols-2  lg:gap-12">
+          <ul className="grid grid-cols-1 gap-10 lg:gap-12">
             {cards.map((card) => (
               <li key={card.id} className="flex flex-col items-center gap-4">
-                <div className=" w-full max-w-[min(100%,620px)] overflow-hidden rounded-sm bg-white shadow-lg">
+                <div className=" w-full max-w-[min(100%,1080px)] overflow-hidden rounded-sm bg-white shadow-lg">
                   <img
                     src={card.image_url}
                     alt={card.title || "Menykort"}
