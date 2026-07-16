@@ -1,7 +1,7 @@
 "use client";
 
 import type { MenuCard } from "@/lib/menu-cards";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 export default function MenuCardsAdmin() {
   const [cards, setCards] = useState<MenuCard[]>([]);
@@ -10,6 +10,17 @@ export default function MenuCardsAdmin() {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  const imagePreview = useMemo(
+    () => (image ? URL.createObjectURL(image) : null),
+    [image],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+    };
+  }, [imagePreview]);
 
   const loadCards = useCallback(async () => {
     setLoading(true);
@@ -97,9 +108,6 @@ export default function MenuCardsAdmin() {
         <h2 className="font-display text-2xl font-bold text-primary">
           Ladda upp menykort
         </h2>
-        <p className="text-sm text-foreground/60">
-          Ladda upp stående A4-bilder (menykort). De visas på menysidan.
-        </p>
 
         <label className="block space-y-1">
           <span className="text-xs font-medium uppercase tracking-[0.2em] text-primary/70">
@@ -123,9 +131,29 @@ export default function MenuCardsAdmin() {
             accept="image/*"
             required
             onChange={(e) => setImage(e.target.files?.[0] ?? null)}
-            className="w-full text-sm"
+            className="w-fit px-1 rounded-md text-sm border border-primary/50"
           />
         </label>
+
+        {imagePreview && (
+          <div className="space-y-2">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary/70">
+              Förhandsvisning
+            </p>
+            <div className="mx-auto w-full max-w-[920px] overflow-hidden rounded-sm bg-white shadow-sm ">
+              <img
+                src={imagePreview}
+                alt={image?.name ?? "Förhandsvisning"}
+                className="size-full object-cover"
+              />
+            </div>
+            {image && (
+              <p className="text-center text-xs text-foreground/60">
+                {image.name}
+              </p>
+            )}
+          </div>
+        )}
 
         <button
           type="submit"
@@ -158,7 +186,7 @@ export default function MenuCardsAdmin() {
                 key={card.id}
                 className="space-y-3 rounded-lg border border-primary/15 bg-white/50 p-4"
               >
-                <div className="mx-auto w-full max-w-[180px] overflow-hidden rounded-sm bg-white shadow-sm aspect-[210/297]">
+                <div className="mx-auto w-full max-w-[280px] overflow-hidden rounded-sm bg-white shadow-sm ">
                   <img
                     src={card.image_url}
                     alt={card.title || "Menykort"}
