@@ -69,6 +69,7 @@ const BesokOss = () => {
             </h3>
             <p className="mt-2 text-foreground/70">ekkebar@gmail.com</p>
           </div>
+          <p>test</p>
         </div>
       </div>
     </section>

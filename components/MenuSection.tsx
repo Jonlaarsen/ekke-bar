@@ -1,8 +1,29 @@
-import { listMenuCards } from "@/lib/menu-cards-db";
-import { withDisplayImageUrl } from "@/lib/menu-image-url";
+import { getMenuTree } from "@/lib/menu-db";
+import { countMenuItems, formatMenuPrice, type MenuItem } from "@/lib/menu";
+
+function MenuItemRow({ item }: { item: MenuItem }) {
+  return (
+    <li className="space-y-1">
+      <div className="flex items-baseline justify-between gap-4">
+        <span className="font-display text-lg font-bold sm:text-xl">
+          {item.name}
+        </span>
+        <span className="max-w-[45%] shrink-0 text-right font-display text-lg font-bold leading-snug sm:max-w-none sm:text-xl">
+          {formatMenuPrice(item.price)}
+        </span>
+      </div>
+      {item.ingredients_origin && (
+        <p className="max-w-xl text-sm leading-relaxed text-secondary-bg/70">
+          {item.ingredients_origin}
+        </p>
+      )}
+    </li>
+  );
+}
 
 export default async function MenuSection() {
-  const cards = (await listMenuCards()).map(withDisplayImageUrl);
+  const tree = await getMenuTree();
+  const itemCount = countMenuItems(tree);
 
   return (
     <div
@@ -11,7 +32,7 @@ export default async function MenuSection() {
     >
       <img
         src="/ekke_img/sparkle.png"
-        className="pointer-events-none absolute md:bottom-20 bottom-5 left-10 md:w-70 w-30 z-50"
+        className="pointer-events-none absolute bottom-5 left-10 z-50 w-30 md:bottom-20 md:w-70"
         alt=""
       />
       <img
@@ -20,7 +41,7 @@ export default async function MenuSection() {
         alt=""
       />
 
-      <div className="relative z-10 mx-auto max-w-5xl space-y-12">
+      <div className="relative z-10 mx-auto max-w-3xl space-y-12">
         <div className="space-y-4 text-center">
           <p className="text-xs font-medium uppercase tracking-[0.35em] text-secondary-bg/70">
             Meny
@@ -29,33 +50,60 @@ export default async function MenuSection() {
             Menu
           </h1>
           <p className="mx-auto max-w-lg text-base text-secondary-bg/75 sm:text-lg">
-            Våra menykort — ta en titt.
+            Dryck och mat på Ekke Bar.
           </p>
         </div>
 
-        {cards.length === 0 ? (
+        {itemCount === 0 ? (
           <p className="text-center text-secondary-bg/60">
-            Inga menykort publicerade ännu.
+            Menyn uppdateras snart.
           </p>
         ) : (
-          <ul className="grid grid-cols-1 gap-10 lg:gap-12">
-            {cards.map((card) => (
-              <li key={card.id} className="flex flex-col items-center gap-4">
-                <div className=" w-full max-w-[min(100%,1080px)] overflow-hidden rounded-sm bg-white shadow-lg">
-                  <img
-                    src={card.image_url}
-                    alt={card.title || "Menykort"}
-                    className="size-full object-cover"
-                  />
-                </div>
-                {card.title && (
-                  <h2 className="font-display text-xl font-bold text-secondary-bg">
-                    {card.title}
+          <div className="space-y-14 bg-primary/30 py-16 px-20 box rounded-4xl">
+            {tree.map((category) => {
+              const hasDirectItems = (category.items?.length ?? 0) > 0;
+              const hasSubItems = category.subcategories?.some(
+                (sub) => (sub.items?.length ?? 0) > 0,
+              );
+              if (!hasDirectItems && !hasSubItems) return null;
+
+              return (
+                <section key={category.id} className="space-y-8">
+                  <h2 className="text-center font-display text-4xl font-bold sm:text-5xl">
+                    {category.name}
                   </h2>
-                )}
-              </li>
-            ))}
-          </ul>
+
+                  <div className="space-y-10">
+                    {hasDirectItems && (
+                      <ul className="space-y-5">
+                        {category.items!.map((item) => (
+                          <MenuItemRow key={item.id} item={item} />
+                        ))}
+                      </ul>
+                    )}
+
+                    {category.subcategories?.map((sub) => {
+                      if (!sub.items?.length) return null;
+
+                      return (
+                        <div key={sub.id} className="space-y-4">
+                          <h3 className="border-b border-secondary-bg/25 pb-2 text-center text-sm font-semibold uppercase tracking-[0.35em] text-secondary-bg/85">
+                            {sub.name}
+                          </h3>
+
+                          <ul className="space-y-5">
+                            {sub.items.map((item) => (
+                              <MenuItemRow key={item.id} item={item} />
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
         )}
       </div>
     </div>

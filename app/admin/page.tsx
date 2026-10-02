@@ -1,5 +1,5 @@
 import AdminLogout from "@/components/AdminLogout";
-import MenuCardsAdmin from "@/components/MenuCardsAdmin";
+import MenuItemsAdmin from "@/components/MenuItemsAdmin";
 import { SESSION_COOKIE, isValidSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -31,7 +31,7 @@ export default async function AdminPage() {
           <AdminLogout />
         </div>
 
-        <MenuCardsAdmin />
+        <MenuItemsAdmin />
       </div>
     </main>
   );

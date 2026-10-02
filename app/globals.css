@@ -25,6 +25,12 @@
   }
 } */
 
+.box {
+  mask: 
+    linear-gradient(-90deg,#0000 60px,#000 0) 30px,
+    radial-gradient(30px,#000 calc(100% - 1px),#0000) 50%/60px 55.5px space repeat
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

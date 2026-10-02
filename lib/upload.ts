@@ -1,3 +1,4 @@
+import { MENU_IMAGE_MAX_AGE } from "@/lib/image-cache";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { put } from "@vercel/blob";
@@ -46,6 +47,7 @@ export async function uploadMenuImage(file: File) {
       file,
       {
         access: "private",
+        cacheControlMaxAge: MENU_IMAGE_MAX_AGE,
         ...(process.env.BLOB_READ_WRITE_TOKEN
           ? { token: process.env.BLOB_READ_WRITE_TOKEN }
           : {}),
