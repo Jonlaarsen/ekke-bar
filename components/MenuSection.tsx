@@ -3,12 +3,12 @@ import { countMenuItems, formatMenuPrice, type MenuItem } from "@/lib/menu";
 
 function MenuItemRow({ item }: { item: MenuItem }) {
   return (
-    <li className="space-y-1">
+    <li className="space-y-1 ">
       <div className="flex items-baseline justify-between gap-4">
-        <span className="font-display text-lg font-bold sm:text-xl">
+        <span className="font-display text-sm font-bold sm:text-xl">
           {item.name}
         </span>
-        <span className="max-w-[45%] shrink-0 text-right font-display text-lg font-bold leading-snug sm:max-w-none sm:text-xl">
+        <span className="max-w-[45%] shrink-0 text-right font-display text-xs font-bold leading-snug sm:max-w-none sm:text-xl">
           {formatMenuPrice(item.price)}
         </span>
       </div>
@@ -28,7 +28,7 @@ export default async function MenuSection() {
   return (
     <div
       id="menu"
-      className="relative min-h-screen scroll-mt-16 bg-primary/20 px-5 py-24 text-secondary-bg sm:px-8 lg:px-12"
+      className="relative min-h-screen scroll-mt-16 bg-primary/10 px-5 py-34 text-secondary-bg sm:px-8 lg:px-12"
     >
       <img
         src="/ekke_img/sparkle.png"
@@ -43,13 +43,11 @@ export default async function MenuSection() {
 
       <div className="relative z-10 mx-auto max-w-3xl space-y-12">
         <div className="space-y-4 text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.35em] text-secondary-bg/70">
-            Meny
-          </p>
-          <h1 className="font-display text-5xl font-bold sm:text-6xl lg:text-7xl">
+
+          <h1 className="font-display text-5xl font-bold sm:text-6xl lg:text-8xl">
             Menu
           </h1>
-          <p className="mx-auto max-w-lg text-base text-secondary-bg/75 sm:text-lg">
+          <p className="mx-auto max-w-lg text-base text-secondary-bg/85 sm:text-xl ">
             Dryck och mat på Ekke Bar.
           </p>
         </div>
@@ -69,7 +67,7 @@ export default async function MenuSection() {
 
               return (
                 <section key={category.id} className="space-y-8">
-                  <h2 className="text-center font-display text-4xl font-bold sm:text-5xl">
+                  <h2 className="text-center font-display text-4xl font-bold sm:text-5xl border-b-2 pb-5 border-secondary-bg/25 ">
                     {category.name}
                   </h2>
 
@@ -87,12 +85,13 @@ export default async function MenuSection() {
 
                       return (
                         <div key={sub.id} className="space-y-4">
-                          <h3 className="border-b border-secondary-bg/25 pb-2 text-center text-sm font-semibold uppercase tracking-[0.35em] text-secondary-bg/85">
+                          <h3 className=" pb-2 text-center text-sm font-semibold uppercase tracking-[0.35em] text-secondary-bg/85">
                             {sub.name}
                           </h3>
 
-                          <ul className="space-y-5">
+                          <ul className="space-y-5 ">
                             {sub.items.map((item) => (
+
                               <MenuItemRow key={item.id} item={item} />
                             ))}
                           </ul>
