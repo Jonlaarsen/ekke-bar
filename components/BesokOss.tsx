@@ -60,7 +60,7 @@ const BesokOss = () => {
             <ul className="mt-2 space-y-1 text-foreground/70">
               <li>Mån–Tor: 16:00–22:00</li>
               <li>Fre–Lör: 16:00–00:00</li>
-              <li>Sön: 13:00–21:00</li>
+              <li>Sön: 16:00–22:00</li>
             </ul>
           </div>
           <div>
@@ -69,7 +69,6 @@ const BesokOss = () => {
             </h3>
             <p className="mt-2 text-foreground/70">ekkebar@gmail.com</p>
           </div>
-          <p>test</p>
         </div>
       </div>
     </section>
